@@ -1,0 +1,56 @@
+- name: playbook1
+  hosts: web
+  remote_user: ahmedelenany
+  become: no
+  tasks:
+    - name: update repo
+      yum:
+        name: '*'
+        state: latest
+    
+    - name: install java-17-openjdk
+      yum:
+        name: java-17-openjdk
+        state: present
+
+    - name: create dir 
+      file: 
+        path: "/home/ahmedelenany/nexus"
+        state: directory
+
+    - name: change directory
+      command: "ch /home/ahmedelenany/nexus"
+
+    - name: download nexus
+      get_url: 
+        url: https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+        dest: "/home/ahmedelenany/nexus/nexus.tar.gz"
+    
+    - name: unarchiving
+      unarchive:
+        src: nexus.tar.gz
+        dest: "/home/ahmedelenany/nexus/"
+    
+    - name: rename untared to nexus
+      command: "mv nexus-3* nexus"
+    
+    - name: create a new user named nexus to run the nexus service
+      user:
+        name: nexus
+    
+    - name: Change the ownership of nexus files to nexus user.
+      file:
+        path: "/home/ahmedelenany/nexus"
+        owner: nexus
+        group: nexus
+        recurse: yes
+
+    - name: Change the ownership of nexus data directory to nexus user.
+      file:
+        path: "/home/ahmedelenany/nexus/sonatype-work"
+        owner: nexus
+        group: nexus
+        recurse: yes
+    
+    
+    
