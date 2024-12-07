@@ -52,5 +52,11 @@
         group: nexus
         recurse: yes
     
-    
+    # - name: Transfer a file to /etc/systemd/system/nexus.service
+    #   template:
+    #     src: ./serviceFile
+    #     dest: /etc/systemd/system/nexus.service
+    #     owner: nexus
+    #     group: nexus
+    #     mode: '0640'
     
